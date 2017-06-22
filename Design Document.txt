@@ -1,0 +1,44 @@
+Design Document - 
+
+The application consists of a single main function which does both the tasks of indexing and querying. It reads all the files with ".txt" extension in the Dataset whose location is passed as command line parameter. It then asks the user for a search query and returns top 10 documents matching the query. It prints the following info for the documents - 
+
+	1. Id of the document
+	2. Title
+	3. Location of the file
+
+
+Data Structures used - 
+
+HashMap - HashMap have been used for fast retrival of data corresponding to a given key.
+Vector - vectors are variable length arrays which are used to store posting lists
+Pair - It is an ordered pair of elements
+
+Main variables used in the program - 
+
+1. map<string, vector<pair<int,double> > > termPostingListsMapping 
+	
+		It is a HashMap that stores the posting lists corresponding to a given term. The terms are themselves sorted in ascending order. The entry of posting lists contains the documentId of the document containing the term the the tf value -> log10(1+termFrequency).
+
+2. map<int, pair<string, string> > docIdTitleMapping;
+	
+		It maps the documentId's to their title and location which makes it easy and efficient to get the title and location of a document given the docId.
+
+3. map<string, int> termFrequencyMapping;
+		While processing a document it stores the freequency of every term in the document. After the document is processed, its result is pushed to the posting lists for the terms.
+
+4. unordered_map<int, int> docLength;
+
+		It stores the length of the document corresponding to a docId.
+
+5. map<string, int> queryTermFreequency;
+		
+		It stores the freequency of every term in the query. The freequency is then used to calculate the queryTermFreequency and added to the result after multiplying with tf-idf weight for the term
+
+Libaries Used - 
+
+1. C++ Boost library( Version 1.59.0) for the following tasks - 
+	1.1 Tokenization
+	1.2 Case folding
+	1.3 Other String processing functions
+
+2. Porter's Stemmer algorithm C++ implementation by author Sean Massung which is available under open source license. - https://bitbucket.org/smassung/porter2_stemmer
